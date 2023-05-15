@@ -34,7 +34,7 @@ public class PlayerHealth : AttributesSync
 
      if (Input.GetKeyDown(KeyCode.M))
         {
-            InvokeRemoteMethod("Test",UserId.AllInclusive, "Hello wrodl!");
+            InvokeRemoteMethod("Test",UserId.AllInclusive, "Hello world!");
         }
     }
 
