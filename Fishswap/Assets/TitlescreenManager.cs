@@ -4,15 +4,36 @@ using UnityEngine;
 
 public class TitlescreenManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+
+    [SerializeField] List<Transform> spawnPoints;
+    
+    [SerializeField] GameObject spaceFish;
+    [SerializeField] GameObject spaceWalter;
+
+    public bool canSpawnFish = true;
+    public bool canSpawnWalter = true;
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
+    
+
     void Update()
     {
         
     }
+
+    void SpawnFish()
+    {
+
+    }
+
+    void SpawnWalter()
+    {
+
+    }
+
+
 }
