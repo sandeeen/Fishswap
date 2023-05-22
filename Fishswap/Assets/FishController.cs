@@ -5,6 +5,7 @@ using UnityEngine;
 public class FishController : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 5f;
+    private GameObject fish;
 
 
     private Camera mainCamera;
@@ -21,6 +22,7 @@ public class FishController : MonoBehaviour
     void Start()
     {
         mainCamera = Camera.main;
+        fish = GameObject.Find("fish");
     }
 
     void Update()
@@ -53,15 +55,16 @@ public class FishController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Raycast did not hit");
+
         }
     }
 
     private void UpdateFishPos()
     {
-        transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
-        transform.LookAt(targetPos);
-        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 90);
+        fish.transform.position = Vector3.MoveTowards(fish.transform.position, targetPos, moveSpeed * Time.deltaTime);
+        fish.transform.position = new Vector3(fish.transform.position.x, 2.5f, fish.transform.position.z);
+        fish.transform.LookAt(targetPos);
+        fish.transform.eulerAngles = new Vector3(0, fish.transform.eulerAngles.y, 90);
     }
 
 }
