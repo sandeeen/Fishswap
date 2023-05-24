@@ -16,6 +16,8 @@ public class FisherController : MonoBehaviour
     float mouseX;
     float mouseY;
 
+    public bool frozen;
+
     private void Awake()
     {
 
@@ -30,7 +32,7 @@ public class FisherController : MonoBehaviour
 
     void Update()
     {
-
+        if (frozen) { return; }
         mouseX = Input.GetAxis("Mouse X");
         mouseY = Input.GetAxis("Mouse Y");
 
@@ -57,12 +59,12 @@ public class FisherController : MonoBehaviour
         }
         else
         {
+
         }
     }
 
     private void UpdateFisherPos()
     {
-
         bobber.transform.position = Vector3.MoveTowards(bobber.transform.position, targetPos, moveSpeed * Time.deltaTime);
         bobber.transform.position = new Vector3(bobber.transform.position.x, 2.5f,bobber.transform.position.z);
         bobber.transform.LookAt(targetPos);
@@ -71,8 +73,6 @@ public class FisherController : MonoBehaviour
         {
             return;
         }
-
-
         fisher.transform.position = new Vector3(bobber.transform.position.x,0,bobber.transform.position.z).normalized * distance;
         fisher.transform.LookAt(Vector3.zero);
         fisher.transform.eulerAngles = new Vector3(-90, fisher.transform.eulerAngles.y, 0);

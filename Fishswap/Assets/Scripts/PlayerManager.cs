@@ -26,12 +26,17 @@ public class PlayerManager : MonoBehaviour
         {
             myIndex = avatar.Possessor.Index;
         }
-        else
+        if(FindObjectsOfType<PlayerManager>().Length > 1)
         {
             enabled = false;
-            myIndex = -1;
         }
+        //else
+        //{
+        //    enabled = false;
+        //    myIndex = -1;
+        //}
     }
+
 
 
     // Start is called before the first frame update
@@ -96,26 +101,30 @@ public class PlayerManager : MonoBehaviour
                 lowestIndex = i;
             }
         }
-        return lowestIndex;
-    }
+        return lowestId;
+    } 
 
-    public void AddScore()
+
+
+    public IEnumerator Freeze(float time)
     {
-        score++;
-        if(scoreText != null)
-        {
-            scoreText.text = score.ToString();
-        }
+        GetComponent<FisherController>().frozen = true;
+        GetComponent<FishController>().frozen = true;
+        yield return new WaitForSeconds(time);
+        GetComponent<FisherController>().frozen = false;
+        GetComponent<FishController>().frozen = false;
     }
 
     private void BecomeFish()
     {
+        if (!GetComponent<PlayerManager>().enabled) { return; }
         GetComponent<FisherController>().enabled = false;
         GetComponent<FishController>().enabled = true;
     }
 
     private void BecomeFisher()
     {
+        if (!GetComponent<PlayerManager>().enabled) { return; }
         GetComponent<FisherController>().enabled = true;
         GetComponent<FishController>().enabled = false;
     }
@@ -131,10 +140,5 @@ public class PlayerManager : MonoBehaviour
         {
             BecomeFish();
         }
-    }
-
-    public void SwapWarning()
-    {
-       
     }
 }

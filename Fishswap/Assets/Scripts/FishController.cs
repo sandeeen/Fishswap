@@ -14,6 +14,8 @@ public class FishController : MonoBehaviour
     float mouseX;
     float mouseY;
 
+    public bool frozen;
+
     private void Awake()
     {
 
@@ -27,7 +29,7 @@ public class FishController : MonoBehaviour
 
     void Update()
     {
-
+        if (frozen) { return; }
         mouseX = Input.GetAxis("Mouse X");
         mouseY = Input.GetAxis("Mouse Y");
 

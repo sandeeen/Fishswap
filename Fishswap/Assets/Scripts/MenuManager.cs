@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class MenuManager : MonoBehaviour
 {
     [SerializeField] Multiplayer multiplayer;
+    [SerializeField] GameObject menuManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +20,7 @@ public class MenuManager : MonoBehaviour
         int userCount = multiplayer.GetUsers().Count;
         if(userCount == 2)
         {
+            menuManager.GetComponent<Canvas>().enabled = false;
         }
     }
 }

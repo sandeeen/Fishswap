@@ -5,6 +5,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Alteruna;
+using UnityEngine.SocialPlatforms.Impl;
+using TMPro;
 
 public class SwapController : AttributesSync
 {
@@ -33,7 +35,11 @@ public class SwapController : AttributesSync
     [SerializeField] float catchRange;
     bool paused = false;
     bool state = false;
+    int score;
     PlayerManager playerManager;
+    [SerializeField] ScoreBoard scoreBoard;
+
+    Coroutine swapPlayers;
 
     // Start is called before the first frame update
     void Start()
@@ -45,7 +51,11 @@ public class SwapController : AttributesSync
     {
         values = new List<float>();
         random = new System.Random();
-        StartCoroutine(SwapPlayers());
+        if(swapPlayers != null)
+        {
+            StopCoroutine(swapPlayers);
+        }
+        swapPlayers = StartCoroutine(SwapPlayers());
         Debug.LogError("THIS HAS RUN, IF IT HAS RAN TWICE SOMETHING IS WRONG");
     }
 
@@ -78,38 +88,14 @@ public class SwapController : AttributesSync
 
     private void Catch()
     {
-        fish.transform.position = fishSpawn.position;
-        bobber.transform.position = bobberSpawn.position;
-        int stateInt = state ? 1 : 0;
-        List<User> users = FindObjectOfType<Multiplayer>().GetUsers();
-        for (int i = 0; i < users.Count; i++)
-        {
-            InvokeRemoteMethod("AddScore", users[i].Index, currentFisherIndex);
-        }
-    }
-
-    [SynchronizableMethod]
-    private void AddScore(int index)
-    {
-        if (playerManagers.ContainsKey(index))
-        {
-            playerManagers[index].AddScore();
-        }
-        else
-        {
-            LoadAllPlayers();
-            if(playerManagers.ContainsKey(index))
-            {
-                playerManagers[index].AddScore();
-            }
-        }
+        InvokeRemoteMethod("CatchSync", UserId.AllInclusive);
+        InvokeRemoteMethod("AddScore", UserId.AllInclusive, currentFisherIndex);
     }
 
     private IEnumerator SwapPlayers()
     {
         yield return new WaitForSeconds((float)GenerateRandomValue());
-        InvokeRemoteMethod("SwapWarning", UserId.All);
-        SwapWarning();
+        InvokeRemoteMethod("SwapWarning", UserId.AllInclusive);
         yield return new WaitForSeconds(warningTimer);
         Debug.Log("Swap!");
         state = !state;
@@ -123,9 +109,48 @@ public class SwapController : AttributesSync
                 currentFisherIndex = users[i].Index;
             }
         }
-        InvokeRemoteMethod("StopSwapWarning", UserId.All);
-        StopSwapWarning();
+        InvokeRemoteMethod("StopSwapWarning", UserId.AllInclusive);
         StartCoroutine(SwapPlayers());
+    }
+
+    [SynchronizableMethod]
+    private void CatchSync()
+    {
+        PlayerManager[] playermanagers = FindObjectsOfType<PlayerManager>();
+        for(int i = 0; i < playermanagers.Length; i++)
+        {
+            if (playermanagers[i].enabled)
+            {
+                StartCoroutine(playermanagers[i].Freeze(0.25f));
+            }
+            else
+            {
+                Debug.Log("Disabled");
+            }
+        }
+        fish.transform.position = fishSpawn.position;
+        bobber.transform.position = bobberSpawn.position;
+        StartCoroutine(CatchDelayTeleport());
+    }
+
+    IEnumerator CatchDelayTeleport() 
+    {
+        yield return null;
+        fish.transform.position = fishSpawn.position;
+        bobber.transform.position = bobberSpawn.position;
+    }
+
+    [SynchronizableMethod]
+    private void AddScore(int index)
+    {
+        if(index == 0)
+        {
+            scoreBoard.IncreasePlayer1Score(1);
+        }
+        else
+        {
+            scoreBoard.IncreasePlayer2Score(1);
+        }
     }
 
     public double GenerateRandomValue()
@@ -155,14 +180,10 @@ public class SwapController : AttributesSync
     [SynchronizableMethod]
     public void Swap(int state, int index)
     {
-        if(playerManagers.ContainsKey(index))
+        PlayerManager[] playerManagersFound = FindObjectsOfType<PlayerManager>();
+        for(int i = 0; i < playerManagersFound.Length; i++)
         {
-            playerManagers[index].SwapState(state);
-        }
-        else
-        {
-            LoadAllPlayers();
-            playerManagers[index].SwapState(state);
+            playerManagersFound[i].SwapState(state);
         }
     }
 
@@ -181,6 +202,10 @@ public class SwapController : AttributesSync
     public void StopSwapWarning()
     {
         Debug.Log("Stop warning");
+        if (swapWarningObject == null)
+        {
+            swapWarningObject = Instantiate(swapWarningPrefab, canvas.transform);
+        }
         swapWarningObject.SetActive(false);
     }
 
