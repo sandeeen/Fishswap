@@ -17,7 +17,7 @@ public class FlyingThroughSpaceController : MonoBehaviour
 
         rotationAxis = Random.onUnitSphere;
 
-        Destroy(gameObject, 40f);
+        Destroy(gameObject, 40f);   
     }
 
     void Update()

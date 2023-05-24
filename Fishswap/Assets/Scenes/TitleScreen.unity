@@ -394,10 +394,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fishSpawnPoint: {x: -200, y: -54, z: 147}
   walterSpawnPoint: {x: 220, y: 20, z: 147}
+  contrainerSpawnPoint: {x: 250, y: 40, z: 200}
+  wellSpawnPoint: {x: -230, y: -14, z: 200}
   menuMusic: {fileID: 8300000, guid: 331c5cc1336fa27478666e5ebc46f12e, type: 3}
   beyondTheSea: {fileID: 8300000, guid: 602e55fa1b114dc489f6e6888f99dddf, type: 3}
   spaceFish: {fileID: 8592228821969932572, guid: 5a57fa7fd88fc4649be41ee4e714324c, type: 3}
   spaceWalter: {fileID: 6815872592633021370, guid: 89f51b297ea293247ad4670a381ef24d, type: 3}
+  spaceContainer: {fileID: 1283187016696623915, guid: 51d7d057ca971bf45a651a5c9ceefb1a, type: 3}
+  spaceWell: {fileID: 9137563192831204902, guid: abc1f93299bb8cf4386b5d92ddce5a71, type: 3}
   canSpawnFish: 1
   canSpawnWalter: 1
   StartButton: {fileID: 1165979531}
