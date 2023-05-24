@@ -9,12 +9,16 @@ public class TitlescreenManager : MonoBehaviour
 
     [SerializeField] Vector3 fishSpawnPoint;
     [SerializeField] Vector3 walterSpawnPoint;
+    [SerializeField] Vector3 contrainerSpawnPoint;
+    [SerializeField] Vector3 wellSpawnPoint;
 
     [SerializeField] AudioClip menuMusic;
     [SerializeField] AudioClip beyondTheSea;
 
     [SerializeField] GameObject spaceFish;
     [SerializeField] GameObject spaceWalter;
+    [SerializeField] GameObject spaceContainer;
+    [SerializeField] GameObject spaceWell;
 
     public bool canSpawnFish = true;
     public bool canSpawnWalter = true;
@@ -52,8 +56,7 @@ public class TitlescreenManager : MonoBehaviour
         if (timer > timeToSpawn && hasRevealed)
         {
             timer = 0f;
-            SpawnFish();
-            SpawnWalter();
+            StartCoroutine(SpawnStuff());
         }
 
     }
@@ -66,6 +69,16 @@ public class TitlescreenManager : MonoBehaviour
     void SpawnWalter()
     {
         Instantiate(spaceWalter, walterSpawnPoint, Quaternion.identity);
+    }
+
+    void SpawnContainer()
+    {
+        Instantiate(spaceContainer, contrainerSpawnPoint, Quaternion.identity);
+    }
+
+    void SpawnWell()
+    {
+        Instantiate(spaceWell, wellSpawnPoint, Quaternion.identity);
     }
 
     public void StartGame()
@@ -88,5 +101,16 @@ public class TitlescreenManager : MonoBehaviour
         yield return new WaitForSeconds(29f);
         audioSource.PlayOneShot(beyondTheSea);
         audioSource.loop = true;
+    }
+
+    private IEnumerator SpawnStuff()
+    {
+        SpawnFish();
+        SpawnWalter();
+
+        yield return new WaitForSeconds(5f);
+
+        SpawnContainer();
+        SpawnWell();
     }
 }
