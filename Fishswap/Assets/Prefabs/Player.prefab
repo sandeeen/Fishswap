@@ -87,6 +87,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 50
+  frozen: 0
 --- !u!114 &1103069540001427750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99,5 +100,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28a4b55dbc7f820448c0a8feb469bdb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 35
+  moveSpeed: 50
   distance: 50
+  frozen: 0
