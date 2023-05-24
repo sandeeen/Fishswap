@@ -19,6 +19,8 @@ public class PlayerManager : MonoBehaviour
     private bool hasStarted = false;
     Multiplayer multiplayer;
 
+    GamelookManager gamelookManager;
+
     private void Awake()
     {
         avatar = GetComponent<Alteruna.Avatar>();
@@ -42,6 +44,8 @@ public class PlayerManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gamelookManager = GameObject.Find("GameManager").GetComponent<GamelookManager>();
+
         Debug.Log(avatar.IsMe);
         if(!avatar.IsMe)
         {
@@ -120,6 +124,7 @@ public class PlayerManager : MonoBehaviour
         if (!GetComponent<PlayerManager>().enabled) { return; }
         GetComponent<FisherController>().enabled = false;
         GetComponent<FishController>().enabled = true;
+        ShowMud();
     }
 
     private void BecomeFisher()
@@ -127,6 +132,7 @@ public class PlayerManager : MonoBehaviour
         if (!GetComponent<PlayerManager>().enabled) { return; }
         GetComponent<FisherController>().enabled = true;
         GetComponent<FishController>().enabled = false;
+        ShowGrass();
     }
 
     public void SwapState(int newState)
@@ -140,5 +146,15 @@ public class PlayerManager : MonoBehaviour
         {
             BecomeFish();
         }
+    }
+
+    void ShowGrass()
+    {
+        gamelookManager.ChangeToGrass();
+    }
+
+    void ShowMud()
+    {
+        gamelookManager.ChangeToDirt();
     }
 }
